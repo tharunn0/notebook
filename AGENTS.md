@@ -32,5 +32,11 @@ Structure each answer as a coherent, three-part technical narrative:
 
 ---
 
-## 4. Execution Rule
+## 4. Question Scope & Answer Boundaries
+- **Strict Scope**: Only answer questions that are explicitly present in the target file with empty answers, or questions specifically identified by the user via question number or snippet.
+- **No Unsolicited Generation**: Never generate, invent, or add new questions or answers on your own that were not present in the target file or explicitly requested by the user.
+
+---
+
+## 5. Execution Rule
 Before answering questions in any topic or markdown file across the repository, read and adhere strictly to this structural framework.
