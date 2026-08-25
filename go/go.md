@@ -1,10 +1,10 @@
-# Go Language Theory: 10 Basic Questions & Answers
+# Go Language Theory: Core Concepts & Mechanics
 
 A foundational guide covering essential core concepts of the Go (Golang) programming language.
 
 ---
 
-## 1. What is Go (Golang) and what are its key features?
+## What is Go (Golang) and what are its key features?
 
 Go is an open-source, statically typed, compiled programming language designed at Google by Robert Griesemer, Rob Pike, and Ken Thompson. Built to address the software engineering challenges of modern, large-scale concurrent systems and multi-core architectures, Go combines the execution speed and type safety of compiled languages like C/C++ with the developer productivity, rapid compilation, and ergonomic simplicity of dynamic languages.
 
@@ -14,7 +14,7 @@ From a production standpoint, Go excels in infrastructure engineering, distribut
 
 ---
 
-## 2. What are Goroutines and how do they differ from OS Threads?
+## What are Goroutines and how do they differ from OS Threads?
 
 Goroutines are lightweight, runtime-managed execution units in Go that enable high-concurrency concurrent processing. Unlike Operating System (OS) threads, which are kernel-managed entities bound to heavy OS resource allocations, Goroutines are cooperatively scheduled multiplexed user-space threads managed entirely by the Go runtime scheduler (the M:N scheduler).
 
@@ -24,7 +24,7 @@ In enterprise systems, Goroutines allow a single Go process to concurrently mana
 
 ---
 
-## 3. What are Channels and what is the difference between Buffered and Unbuffered Channels?
+## What are Channels and what is the difference between Buffered and Unbuffered Channels?
 
 Channels are typed, thread-safe conduits in Go designed for explicit communication, synchronization, and memory sharing between concurrent Goroutines. Guided by Go's concurrency motto—"Do not communicate by sharing memory; instead, share memory by communicating"—channels abstract internal synchronization mechanics using message passing. Channels exist in two distinct operational forms: unbuffered channels, which enforce synchronous rendezvous points, and buffered channels, which provide asynchronous ring-buffer storage up to a pre-allocated capacity.
 
@@ -34,7 +34,7 @@ Unbuffered channels are ideal for deterministic synchronization, handshakes, and
 
 ---
 
-## 4. What is the difference between an Array and a Slice in Go, how does it work internally, and its behaviours?
+## What is the difference between an Array and a Slice in Go, how does it work internally, and its behaviours?
 
 In Go, an array is a fixed-size, contiguous sequence of elements whose length is baked into its static type definition, whereas a slice is a dynamic, flexible view backed by an underlying array. Arrays represent value types allocated directly as static memory blocks, while slices are lightweight header structs providing variable-length abstraction over array storage.
 
@@ -44,7 +44,7 @@ Arrays are typically reserved for fixed domain constants, mathematical vectors, 
 
 ---
 
-## 5. How does Go handle error handling without traditional try-catch exceptions?
+## How does Go handle error handling without traditional try-catch exceptions?
 
 Go eschews traditional `try-catch-finally` exception-handling mechanisms in favor of explicit, control-flow-integrated error handling where errors are treated as ordinary, inspectable values. Functions that can encounter failure conditions return an error value as their final multi-value return parameter, requiring callers to check for `nil` explicitly at the call site.
 
@@ -54,7 +54,7 @@ Explicit error handling promotes transparent call graphs, deterministic resource
 
 ---
 
-## 6. How do Interfaces and Implicit Interface Satisfaction work in Go?
+## How do Interfaces and Implicit Interface Satisfaction work in Go?
 
 Interfaces in Go provide abstract behavioral contract definitions composed of set method signatures. Unlike classical object-oriented languages like Java or C#, Go employs implicit interface satisfaction (structural subtyping), meaning a concrete type satisfies an interface automatically by implementing all of its declared methods without explicit declaration clauses (`implements`).
 
@@ -64,7 +64,7 @@ Implicit satisfaction decouples package dependencies completely: a package consu
 
 ---
 
-## 7. How does Go handle memory allocation, pointer semantics, and value vs. reference semantics?
+## How does Go handle memory allocation, pointer semantics, and value vs. reference semantics?
 
 Go combines explicit pointer semantics with automatic, compiler-driven memory management. Variables are passed strictly by value across function calls, but passing a pointer value permits direct indirect mutation of the underlying shared memory address. Memory is allocated on either the execution stack or the managed heap based on static escape analysis conducted during compilation.
 
@@ -74,7 +74,7 @@ Understanding allocation semantics allows engineers to optimize hot paths in hig
 
 ---
 
-## 8. How does the `defer` keyword work internally in Go, including execution ordering and variable evaluation?
+## How does the `defer` keyword work internally in Go, including execution ordering and variable evaluation?
 
 The `defer` keyword pushes a function call onto an execution stack associated with the current Goroutine, guaranteeing that the deferred function runs immediately after the surrounding function completes, but before control returns to the caller. Deferred calls operate on a Last-In, First-Out (LIFO) execution order and are extensively used for deterministic resource cleanup, lock releases, and panic recovery.
 
@@ -84,7 +84,7 @@ Mechanically, evaluating a `defer` statement evaluates its function target and a
 
 ---
 
-## 9. How does Go's Garbage Collector work internally?
+## How does Go's Garbage Collector work internally?
 
 Go features a concurrent, non-generational, tri-color mark-sweep garbage collector (GC) designed for predictable low-latency execution. Its primary objective is to minimize Stop-The-World (STW) pause times while continuously reclaiming unused heap memory alongside active application Goroutines.
 
@@ -94,7 +94,7 @@ Go's non-generational design trades ultimate CPU throughput for sub-millisecond 
 
 ---
 
-## 10. How are Maps implemented internally in Go, and how is safe concurrent access managed?
+## How are Maps implemented internally in Go, and how is safe concurrent access managed?
 
 In Go, a map is a hash table data structure implemented internally as a dynamic array of buckets containing key-value pairs. Go maps provide $O(1)$ average-time complexity for lookups, insertions, and deletions, but they are explicitly unsafe for concurrent read-write access without external synchronization.
 
