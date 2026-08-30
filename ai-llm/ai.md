@@ -1,0 +1,33 @@
+# Artificial Intelligence & Neural Networks: Key Concepts & Mechanics
+
+A foundational guide covering core AI concepts, biological and artificial neuron models, and the architectural mechanics of neural networks.
+
+---
+
+## What is AI?
+
+Artificial Intelligence (AI) is the field of computer science concerned with building systems that perform tasks which typically require human cognition—perception, reasoning, decision-making, language understanding, and pattern recognition—by learning statistical structure from data or executing encoded rules, rather than following an explicitly hand-coded procedure for every input.
+
+Mechanically, modern AI systems are overwhelmingly built on machine learning, where a model is a parameterized mathematical function and "learning" means adjusting those parameters so the function's output error, measured by a loss function, is minimized over a training dataset. This optimization is typically performed via gradient descent, where the gradient of the loss with respect to each parameter is computed through backpropagation, and parameters are nudged in the direction that reduces error. Symbolic or rule-based AI, by contrast, encodes expert knowledge directly as logic rules, decision trees, or search algorithms (as in classical chess engines or expert systems), and does not require a training corpus to produce its behavior. Most production AI today is a hybrid: statistical models handle perception and generation, while surrounding rule-based logic, guardrails, and search constrain and validate their output.
+
+In practice, AI systems trade off accuracy, generalization, interpretability, and compute cost. A model that memorizes its training data (overfits) performs poorly on unseen inputs, so engineers rely on techniques like regularization, held-out validation sets, and cross-validation to ensure the learned function generalizes. Senior practitioners further distinguish narrow AI—systems specialized for a single task like image classification or translation—from the aspirational goal of general AI capable of transferring reasoning across arbitrary domains, and evaluate deployed systems on latency, robustness to distribution shift, and failure modes as rigorously as on raw benchmark accuracy.
+
+---
+
+## What is a neuron?
+
+In the context of artificial neural networks, a neuron (or unit) is the smallest computational element: it takes a vector of numeric inputs, computes a weighted sum of those inputs plus a bias term, and passes that sum through a non-linear activation function to produce a single scalar output. It is a loose mathematical abstraction inspired by the biological neuron, which receives electrochemical signals through dendrites, integrates them at the cell body (soma), and fires an action potential down its axon to downstream neurons once its membrane potential crosses a threshold.
+
+Mechanically, an artificial neuron computes `output = activation(w·x + b)`, where `x` is the input vector, `w` is a learned weight vector determining how strongly each input influences the neuron, and `b` is a learned bias that shifts the activation threshold. The activation function—commonly ReLU, sigmoid, or tanh—introduces non-linearity; without it, stacking neurons would collapse algebraically into a single linear transformation regardless of depth, eliminating a network's ability to model complex, non-linear relationships. During training, backpropagation computes the gradient of the loss with respect to each neuron's weights and bias via the chain rule, and an optimizer (such as SGD or Adam) updates those parameters to reduce the loss.
+
+The choice of activation function has real production consequences: sigmoid and tanh saturate for large inputs, producing vanishing gradients that stall learning in deep networks, which is why ReLU and its variants (Leaky ReLU, GELU) dominate modern architectures by keeping gradients from shrinking to zero across many layers. Senior engineers also reason about a neuron's weights as a form of learned feature detector—early-layer neurons in a vision model typically respond to low-level features like edges and color gradients, while deeper neurons respond to increasingly abstract, composite features, a property exploited in techniques like transfer learning and feature visualization.
+
+---
+
+## What is a neural network?
+
+A neural network is a layered composition of many neurons—organized into an input layer, one or more hidden layers, and an output layer—where the output of every neuron in one layer feeds as input into the neurons of the next, forming a directed computational graph that approximates a complex function mapping raw inputs to a desired output.
+
+Mechanically, a forward pass propagates data layer by layer: each layer performs a matrix multiplication between the incoming activations and that layer's weight matrix, adds a bias vector, and applies a non-linear activation function elementwise, with the final layer's output interpreted as a prediction (e.g., class probabilities via softmax, or a continuous value). Training proceeds via backpropagation: the loss function compares the network's prediction against the ground truth, and gradients of that loss are propagated backward through every layer using the chain rule, computing how much each weight across the entire network contributed to the error. An optimizer then updates all weights simultaneously, and this forward-backward cycle repeats over many batches of training data (epochs) until the loss converges. Depth (more layers) lets the network compose simple features into increasingly abstract representations, while width (more neurons per layer) increases the capacity of each individual transformation.
+
+Architecturally, the plain fully-connected (dense) network described above is only the base case; convolutional neural networks (CNNs) constrain connectivity and share weights spatially to exploit locality in images, recurrent neural networks (RNNs) and transformers add mechanisms to model sequential or long-range dependencies in text and time series, and modern large language models are transformer stacks with attention mechanisms replacing simple weighted sums as the core computation. In production, senior engineers must manage the trade-off between model capacity and generalization—an over-parameterized network can overfit small datasets—and contend with practical constraints like vanishing/exploding gradients in deep stacks (mitigated via normalization layers and residual/skip connections), the substantial compute and memory cost of training and serving large networks, and the inherent difficulty of interpreting why a trained network produces a given output.
