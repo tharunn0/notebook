@@ -10,6 +10,7 @@ This is a personal notes repository ("notebook") of technical interview-style Q&
 - `databases/db.md` — Database concepts, architectures, storage engines, ACID/BASE
 - `go/go.md` — Go language internals (e.g. GC)
 - `ai-llm/ai.md` — AI/ML fundamentals, neural networks
+- `distributed-systems/distributed-systems.md` — Distributed systems principles, architectures, fault tolerance, and network mechanics
 
 New topics get their own directory with a single `<topic>/<topic>.md` file, following this existing naming convention.
 
