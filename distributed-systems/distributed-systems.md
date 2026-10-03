@@ -70,4 +70,18 @@ Under the hood, these paradigms diverge fundamentally in resource consumption, n
 
 From an architectural perspective, selecting between synchronous and asynchronous communication involves trading immediate conversational simplicity and strong transactional consistency against system resilience, elastic throughput, and operational decoupling. Synchronous communication is indispensable for immediate, read-heavy query paths and critical transactional workflows requiring instantaneous validation, such as credential verification, authorization checks, and payment processing handshakes. To prevent synchronous fragility from degrading cluster availability, senior engineers enforce defensive boundary patterns: aggressive timeouts with downstream deadline and budget propagation, bulkhead thread pool isolation, and circuit breakers that trip to fail fast when downstream error rates spike. Asynchronous communication serves as the foundational backbone for state mutations, cross-domain domain events, data ingestion pipelines, and long-running business workflows such as order fulfillment and report generation. While asynchronous architectures provide natural traffic smoothing and load leveling during peak surges, they demand defensive design against distributed concurrency anomalies: consumers must enforce strict idempotency using deterministic deduplication keys to withstand at-least-once message delivery, handle out-of-order execution, manage dead-letter queues for unprocessable messages, and propagate OpenTelemetry trace contexts through message headers to maintain end-to-end observability across decoupled asynchronous boundaries.
 
+---
 
+## What is the Circuit Breaker Pattern?
+
+The Circuit Breaker pattern is a resilience pattern designed to prevent cascading failures in distributed systems. When a downstream dependency starts failing or slowing down, the breaker halts calls to that service, failing fast so the downstream service has time to recover and the upstream caller doesn't exhaust its own resources.
+
+It operates as a finite state machine with three states:
+
+- **Closed (Normal Operation)**: Requests pass through normally. The breaker tracks metrics—such as error rates, timeouts, or slow responses—across a sliding window. If the failure rate breaches a configured threshold, the breaker trips to Open.
+- **Open (Fail-Fast)**: All incoming requests are immediately blocked or redirected to a fallback without touching the downstream service. This frees up client threads and starts a configured cooldown timer (or reset timeout).
+- **Half-Open (Canary/Probe)**: Once the cooldown timer expires, the breaker lets a limited batch of probe requests pass through:
+  - If these requests succeed, the service is considered healthy and the breaker resets to Closed.
+  - If any fail, the breaker assumes the service is still down and trips back to Open for another cooldown period.
+
+In practice, circuit breakers can be implemented at the application layer using libraries like Resilience4j or Polly, or out-of-process via service mesh sidecars like Envoy. They are usually paired with fallbacks (e.g., serving stale cache or default values) and complementary patterns like exponential backoff retries.
